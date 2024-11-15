@@ -1,5 +1,6 @@
 package edu.grinnell.csc207.sorting;
 
+import java.util.Arrays;
 import java.util.Comparator;
 
 /**
@@ -9,6 +10,7 @@ import java.util.Comparator;
  *   The types of values that are sorted.
  *
  * @author Samuel A. Rebelsky
+ * @author Grant Sackmann
  */
 
 public class MergeSorter<T> implements Sorter<T> {
@@ -55,6 +57,56 @@ public class MergeSorter<T> implements Sorter<T> {
    */
   @Override
   public void sort(T[] values) {
-    // STUB
+    T[] sorted = mergeSortHelper(values);
+    System.arraycopy(sorted, 0, values, 0, values.length);
   } // sort(T[])
+
+  private T[] mergeSortHelper(T[] values) {
+    if (values.length < 2) {
+      return values;
+    } // if
+
+    T[] left = Arrays.copyOfRange(values, 0, values.length / 2);
+    T[] right = Arrays.copyOfRange(values, values.length / 2, values.length);
+    return merge(mergeSortHelper(left), mergeSortHelper(right));
+  } // mergeSortHelper()
+
+  /**
+   * Merges together two sorted sub arrays.
+   *
+   * @param left sorted subarray
+   * @param right sorted subarray
+   * @return sorted array of merge of the left and right arrays
+   */
+  @SuppressWarnings("unchecked")
+  private T[] merge(T[] left, T[] right){
+    int leftIndex = 0;
+    int leftLen = left.length;
+    int rightIndex = 0;
+    int rightLen = right.length;
+    T[] merged = (T[]) new Object[rightLen + leftLen];
+    int mergedIndex = 0;
+
+    while (leftIndex < leftLen && rightIndex < rightLen){
+      int comparison = order.compare(left[leftIndex], right[rightIndex]);
+      if (comparison < 0){
+        merged[mergedIndex++] = left[leftIndex++];
+      } else if (comparison > 0){
+        merged[mergedIndex++] = right[rightIndex++];
+      } else { // equal elements
+        merged[mergedIndex++] = left[leftIndex++];
+        merged[mergedIndex++] = right[rightIndex++];
+      } // if
+    } // while
+
+//    filling remaining values
+    while (leftIndex < leftLen){
+      merged[mergedIndex++] = left[leftIndex++];
+    } // while
+
+    while (rightIndex < rightLen){
+      merged[mergedIndex++] = right[rightIndex++];
+    } // while
+    return merged;
+  } // merge()
 } // class MergeSorter

@@ -1,16 +1,17 @@
 package edu.grinnell.csc207.sorting;
 
+import java.util.Arrays;
 import java.util.Comparator;
 
 /**
- * Something that sorts using insertion sort.
+ * My custom sort class.
  *
- * @param <T> The types of values that are sorted.
- * @author Samuel A. Rebelsky
+ * @param <T>
+ *   The types of values to be sorted.
+ *
  * @author Grant Sackmann
  */
-
-public class InsertionSorter<T> implements Sorter<T> {
+public class SackmannGrantSorter<T> implements Sorter<T> {
   // +--------+------------------------------------------------------
   // | Fields |
   // +--------+
@@ -25,46 +26,44 @@ public class InsertionSorter<T> implements Sorter<T> {
   // +--------------+
 
   /**
-   * Create a sorter using a particular comparator.
+   * Creates a sorter using provided comparator.
    *
    * @param comparator The order in which elements in the array should be ordered after sorting.
    */
-  public InsertionSorter(Comparator<? super T> comparator) {
+  public SackmannGrantSorter(Comparator<? super T> comparator) {
     this.order = comparator;
-  } // InsertionSorter(Comparator<? super T>)
+  } // FakeSorter(Comparator)
 
   // +---------+-----------------------------------------------------
   // | Methods |
   // +---------+
 
   /**
-   * Sort an array in place using insertion sort.
+   * Sort array against provided
    *
    * @param values an array to sort.
    * @post The array has been sorted according to some order (often one given to the constructor).
    * @post For all i, 0 &lt; i &lt; values.length, order.compare(values[i-1], values[i]) &lt;= 0
    */
   @Override
+  @SuppressWarnings("unchecked")
   public void sort(T[] values) {
-    for (int i = 1; i < values.length; i++) {
-      int j = i;
-      while (j > 0 && order.compare(values[j], values[j - 1]) < 0) {
-        swap(values, j, j - 1);
-        j--;
-      } // while
+    int len = values.length;
+    T[] valuesCopy = Arrays.copyOf(values, len);
+    int insertionIndex;
+
+    for (int i = 0; i < len; i++) {
+      T val = valuesCopy[i];
+      insertionIndex = len - 1;
+      for (int j = 0; j < len; j++) {
+        int comparison = order.compare(valuesCopy[j], val);
+        if (comparison > 0 || (comparison == 0 && j < i)) {
+          insertionIndex--;
+        } // if
+      } // for
+//      inserting item in sorted position.
+      values[insertionIndex] = val;
     } // for
   } // sort(T[])
 
-  /**
-   * Simple array value swap method.
-   *
-   * @param values T[] array
-   * @param i      index
-   * @param j      index
-   */
-  private void swap(T[] values, int i, int j) {
-    T tmp = values[i];
-    values[i] = values[j];
-    values[j] = tmp;
-  } // swap(T[], int, int)
-} // class InsertionSorter
+} // SackmannGrantSort class

@@ -55,6 +55,33 @@ public class SelectionSorter<T> implements Sorter<T> {
    */
   @Override
   public void sort(T[] values) {
-    // STUB
+    for (int i = 0; i < values.length - 1; i++) {
+      int j = i;
+      int minValIndex = i;
+
+      while (j < values.length) {
+        if (order.compare(values[j], values[minValIndex]) < 0) {
+          minValIndex = j;
+        } // if
+        j++;
+      } // while
+
+      if (minValIndex != i) {
+        swap(values, i, minValIndex);
+      } // if
+    } // for
   } // sort(T[])
+
+  /**
+   * Simple array value swap method.
+   *
+   * @param values T[] array
+   * @param i      index
+   * @param j      index
+   */
+  private void swap(T[] values, int i, int j) {
+    T tmp = values[i];
+    values[i] = values[j];
+    values[j] = tmp;
+  } // swap(T[], int, int)
 } // class SelectionSorter

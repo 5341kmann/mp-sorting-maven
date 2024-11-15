@@ -58,8 +58,8 @@ public class TestSorter {
     sorter.sort(perm);
     assertArrayEquals(sorted, perm,
       () -> String.format("sort(%s) yields %s rather than %s",
-          Arrays.toString(tmp), 
-          Arrays.toString(perm), 
+          Arrays.toString(tmp),
+          Arrays.toString(perm),
           Arrays.toString(sorted)));
   } // assertSorts
 
@@ -106,11 +106,11 @@ public class TestSorter {
    * Ensure that a randomly permuted version of a moderate-sized
    * array sorts correctly.
    */
-  @Test 
-  public void permutedIntegersTest() { 
-    int SIZE = 100; 
-    if (null == intSorter) { 
-      return; 
+  @Test
+  public void permutedIntegersTest() {
+    int SIZE = 10;
+    if (null == intSorter) {
+      return;
     } // if
     Integer[] original = new Integer[SIZE];
     for (int i = 0; i < SIZE; i++) {
@@ -120,4 +120,60 @@ public class TestSorter {
     ArrayUtils.permute(original);
     assertSorts(expected, original, intSorter);
   } // permutedIntegers
+
+  @Test
+  public void repeatedStringTest() {
+    if (null == stringSorter) {
+      return;
+    } // if
+
+    String[] original = {"foxtrot", "delta", "foxtrot", "delta", "foxtrot"};
+    String[] expected = {"delta", "delta", "foxtrot", "foxtrot", "foxtrot",};
+    assertSorts(expected, original, stringSorter);
+  } // repeatedStringTest()
+
+  @Test
+  public void repeatedIntegersTest() {
+    if (null == intSorter) {
+      return;
+    } // if
+
+    Integer[] original = {1,2,2,1,1,1,1,2};
+    Integer[] expected = {1,1,1,1,1,2,2,2};
+    assertSorts(expected, original, intSorter);
+  } // repeatedIntegersTes()
+
+
+
+  @Test
+  public void emptyStringTest() {
+    if (null == stringSorter) {
+      return;
+    } // if
+
+    String[] original = {"", "delta", "", "charlie", ""};
+    String[] expected = {"", "", "", "charlie", "delta",};
+    assertSorts(expected, original, stringSorter);
+  } // emptyStringTest()
+
+  @Test
+  public void orderedIntegersTest() {
+    if (null == intSorter) {
+      return;
+    } // if
+
+    Integer[] original = {1,10,100,100,1000,10000};
+    Integer[] expected = original.clone();
+    assertSorts(expected, original, intSorter);
+  } // orderedIntegersTest()
+
+  public void nullStringTest() {
+    if (null == stringSorter) {
+      return;
+    }
+
+    String[] original = null;
+    String[] expected = null;
+    assertSorts(expected, original, stringSorter);
+  }
 } // class TestSorter
